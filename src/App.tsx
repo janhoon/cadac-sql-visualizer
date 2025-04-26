@@ -6,35 +6,44 @@ import ParseTreeVisualizer from "./components/parse-tree-visualizer";
 import SQLEditor from "./components/sql-editor";
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Node } from "web-tree-sitter";
+import { Badge } from "./components/ui/badge";
+import { GithubIcon } from "lucide-react";
 
 // Sample SQL queries for examples
 const EXAMPLE_QUERIES = [
-	{name: "Basic", query: `\
+	{
+		name: "Basic",
+		query: `\
 SELECT
 	name,
 	email,
 	phone
-FROM users;`},
-	{name: "Comments", query: `\
+FROM users;`,
+	},
+	{
+		name: "Comments",
+		query: `\
 SELECT
 	-- this comment relates to col1
 	col1, 
 	col2, -- this comment relates to col2
 	-- this comment relates to col3
 	col3 -- this comment also relates to col3
-FROM users;`},
-	{name: "Aliases", query: `\
+FROM users;`,
+	},
+	{
+		name: "Aliases",
+		query: `\
 SELECT
 	u.name AS user_name,
 	u.email AS user_email,
 	u.phone AS user_phone
-FROM users AS u;`},
+FROM users AS u;`,
+	},
 ];
 
 function App() {
-	const [sqlQuery, setSqlQuery] = useState<string>(
-		EXAMPLE_QUERIES[0].query,
-	);
+	const [sqlQuery, setSqlQuery] = useState<string>(EXAMPLE_QUERIES[0].query);
 	const [hoveredNode, setHoveredNode] = useState<Node | null>(null);
 
 	// Handle SQL query changes
@@ -57,9 +66,34 @@ function App() {
 							<p className="text-muted-foreground">
 								Visualize SQL parse trees in real-time using tree-sitter
 							</p>
-							<p className="text-muted-foreground">
-								Visualize SQL parse trees in real-time using tree-sitter
-							</p>
+							<div className="flex flex-wrap gap-2">
+								<p className="text-muted-foreground">
+									Tree Sitter parser available on GitHub:{" "}
+									<a
+										href="https://github.com/janhoon/tree-sitter-sql"
+										className="text-blue-500 hover:underline"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										<Badge className="rounded-full">
+											<GithubIcon /> Repository
+										</Badge>
+									</a>
+								</p>
+								<p className="text-muted-foreground">
+									Source for this demo available on GitHub:{" "}
+									<a
+										href="https://github.com/janhoon/cadac-sql-visualizer"
+										className="text-blue-500 hover:underline"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										<Badge className="rounded-full">
+											<GithubIcon /> Repository
+										</Badge>
+									</a>
+								</p>
+							</div>
 						</div>
 					</header>
 

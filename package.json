@@ -8,7 +8,7 @@
 		"build": "tsc -b && vite build",
 		"lint": "eslint .",
 		"preview": "yarn run build && wrangler pages dev ./dist",
-		"deploy": "yarn run build && wrangler pages deploy ./dist",
+		"deploy": "yarn run build && wrangler pages deploy --branch main ./dist",
 		"postinstall": "cp node_modules/@janhoon/tree-sitter-sql/tree-sitter-sql.wasm public/"
 	},
 	"dependencies": {
