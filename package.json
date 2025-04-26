@@ -8,15 +8,28 @@
 		"build": "tsc -b && vite build",
 		"lint": "eslint .",
 		"preview": "yarn run build && wrangler pages dev ./dist",
-		"deploy": "yarn run build && wrangler pages deploy ./dist"
+		"deploy": "yarn run build && wrangler pages deploy ./dist",
+		"postinstall": "cp node_modules/@janhoon/tree-sitter-sql/tree-sitter-sql.wasm public/"
 	},
 	"dependencies": {
+		"@janhoon/tree-sitter-sql": "^0.1.1",
+		"@monaco-editor/react": "^4.7.0",
+		"@radix-ui/react-slot": "^1.2.0",
+		"@tailwindcss/vite": "^4.1.4",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"lucide-react": "^0.503.0",
+		"monaco-editor": "^0.52.2",
 		"react": "^19.0.0",
-		"react-dom": "^19.0.0"
+		"react-dom": "^19.0.0",
+		"tailwind-merge": "^3.2.0",
+		"tailwindcss": "^4.1.4",
+		"web-tree-sitter": "^0.25.3"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250425.0",
 		"@eslint/js": "^9.22.0",
+		"@types/node": "^22.15.2",
 		"@types/react": "^19.0.10",
 		"@types/react-dom": "^19.0.4",
 		"@vitejs/plugin-react-swc": "^3.8.0",
@@ -24,9 +37,11 @@
 		"eslint-plugin-react-hooks": "^5.2.0",
 		"eslint-plugin-react-refresh": "^0.4.19",
 		"globals": "^16.0.0",
+		"tw-animate-css": "^1.2.8",
 		"typescript": "~5.7.2",
 		"typescript-eslint": "^8.26.1",
 		"vite": "^6.3.1",
 		"wrangler": "^4.13.2"
-	}
+	},
+	"packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
