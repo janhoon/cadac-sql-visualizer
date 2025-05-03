@@ -83,7 +83,9 @@ function App() {
 									Tree Sitter Parsers
 								</span>
 							</a>{" "}
-							we can analyze the structure and semantics of SQL queries.
+							we can analyze the structure and semantics of SQL queries. Hover
+							over the tree nodes to see how the query is structured and how the
+							different parts of the query are related to each other.
 						</p>
 						<Accordion type="single" collapsible>
 							<AccordionItem value="more-info">
