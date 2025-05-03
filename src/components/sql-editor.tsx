@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import Editor, { type Monaco } from "@monaco-editor/react";
 import type { editor } from "monaco-editor";
 import type { Node } from "web-tree-sitter";
-import { useTheme } from "./theme-provider";
 
 interface SQLEditorProps {
     value: string;
@@ -15,7 +14,6 @@ export default function SQLEditor({
     onChange,
     hoveredNode,
 }: SQLEditorProps) {
-    const { theme } = useTheme();
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
     const monacoRef = useRef<Monaco | null>(null);
     const decorationsRef = useRef<string[]>([]);
