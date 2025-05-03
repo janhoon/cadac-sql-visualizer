@@ -6,16 +6,6 @@ import type { Node, Parser as ParserType, Tree } from "web-tree-sitter";
 // @ts-ignore - this is a vite thing to load the related wasm
 import { Language, Parser } from "web-tree-sitter?init";
 
-interface TreeNode {
-	id: string;
-	name: string;
-	children: TreeNode[];
-	originalNode: Node;
-	attributes?: {
-		text: string;
-	};
-}
-
 interface ParseTreeVisualizerProps {
 	sqlQuery: string;
 	onHoverNode: (node: Node | null) => void;
@@ -27,8 +17,7 @@ export default function ParseTreeVisualizer({
 }: ParseTreeVisualizerProps) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [treeData, setTreeData] = useState<TreeNode | null>(null);
-	const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
+	const [treeData, setTreeData] = useState<Tree | null>(null);
 	const parserRef = useRef<ParserType | null>(null);
 	const initialized = useRef(false);
 
@@ -42,7 +31,7 @@ export default function ParseTreeVisualizer({
 
 			try {
 				// Parse SQL query
-				const tree: Tree | null = parserRef.current.parse(sql);
+				const tree: Tree | null = parserRef.current.parse(sql, treeData);
 
 				console.log("Parsed tree:", tree);
 				if (!tree || !tree.rootNode) {
@@ -50,10 +39,7 @@ export default function ParseTreeVisualizer({
 					return;
 				}
 
-				// Convert tree to visualizable format
-				const processedTree = processTreeData(tree.rootNode);
-
-				setTreeData(processedTree);
+				setTreeData(tree);
 				setError(null);
 			} catch (err) {
 				console.error("Error parsing SQL:", err);
@@ -94,12 +80,7 @@ export default function ParseTreeVisualizer({
 		initTreeSitter();
 
 		// Cleanup
-		return () => {
-			// if (parserRef.current) {
-			//   parserRef.current.delete();
-			//   parserRef.current = null;
-			// }
-		};
+		return () => {};
 	}, []);
 
 	// Parse SQL query when it changes with debounce
@@ -108,69 +89,129 @@ export default function ParseTreeVisualizer({
 		debouncedParseAndUpdate(sqlQuery);
 	}, [sqlQuery, debouncedParseAndUpdate]);
 
-	// Process tree data for visualization
-	const processTreeData = (node: Node, parentId = "root"): TreeNode => {
-		const id = `${parentId}-${node.id.toString() || Math.random().toString(36).substr(2, 9)}`;
+	// Render tree node
+	const renderTreeNode = (nodeTree: Tree) => {
+		// Generate array of all visible nodes with their metadata
+		interface VisibleNode {
+			node: Node;
+			depth: number;
+			fieldName: string | null;
+		}
 
-		const result: TreeNode = {
-			id,
-			name: node.type,
-			children: [],
-			originalNode: node,
+		const visibleNodes: VisibleNode[] = [];
+
+		// Follows the approach from tree-sitter playground
+		// Uses cursor to walk the tree and collect visible nodes
+		const walkTree = (rootNode: Node) => {
+			// Use cursor based approach like in the playground example
+			const cursor = rootNode.walk();
+			const visited = new Set<number>();
+
+			// Keep track of current field name during traversal
+			function addNodeToVisibleNodes(
+				node: Node,
+				depth: number,
+				fieldName: string | null,
+			) {
+				if (visited.has(node.id)) return;
+				visited.add(node.id);
+
+				visibleNodes.push({
+					node,
+					depth,
+					fieldName,
+				});
+			}
+
+			// Add root node
+			addNodeToVisibleNodes(rootNode, 0, null);
+
+			// Use a similar traversal approach to the playground
+			let depth = 0;
+			let visitedChildren = false;
+
+			while (true) {
+				if (visitedChildren) {
+					if (cursor.gotoNextSibling()) {
+						visitedChildren = false;
+					} else if (cursor.gotoParent()) {
+						depth--;
+						visitedChildren = true;
+					} else {
+						break;
+					}
+				} else {
+					const node = cursor.currentNode;
+
+					// Get actual field names from current position in tree
+					// Only include the node if it's named (skip anonymous nodes)
+					if (node !== rootNode && node.isNamed) {
+						const fieldName = cursor.currentFieldName;
+						addNodeToVisibleNodes(node, depth, fieldName);
+					}
+
+					if (cursor.gotoFirstChild()) {
+						depth++;
+						visitedChildren = false;
+					} else {
+						visitedChildren = true;
+					}
+				}
+			}
 		};
 
-		// Add text content if this is a leaf node
-		if (node.childCount === 0) {
-			result.attributes = {
-				text: node.text,
-			};
-		}
+		// Build the array of nodes
+		walkTree(nodeTree.rootNode);
 
-		// Process children
-		for (let i = 0; i < node.childCount; i++) {
-			const childNode = node.child(i);
-			if (childNode) {
-				result.children.push(processTreeData(childNode, id));
-			}
-		}
-
-		return result;
-	};
-
-	// Render tree node
-	const renderTreeNode = (node: TreeNode, depth = 0) => {
-		if (!node) return null;
-
-		const isHovered = hoveredNodeId === node.id;
-		const hasChildren = node.children && node.children.length > 0;
-
+		// Render the nodes as a list (like in the playground)
 		return (
-			<div key={node.id} className="ml-4">
-				<div
-					className={`flex cursor-pointer items-start rounded px-1 py-0.5 text-sm ${
-						isHovered ? "bg-blue-100 dark:bg-blue-900/30" : "hover:bg-muted/50"
-					}`}
-					onMouseEnter={() => {
-						setHoveredNodeId(node.id);
-						onHoverNode(node.originalNode);
-					}}
-					onMouseLeave={() => {
-						setHoveredNodeId(null);
-						onHoverNode(null);
-					}}
-				>
-					<span className="font-mono font-medium">{node.name}</span>
-					{node.attributes?.text && (
-						<span className="ml-2 text-muted-foreground">
-							"{node.attributes.text}"
-						</span>
-					)}
-				</div>
-				{hasChildren && (
-					<div className="border-l pl-2">
-						{node.children.map((child) => renderTreeNode(child, depth + 1))}
-					</div>
-				)}
+			<div className="p-4 font-mono overflow-auto">
+				{visibleNodes.map((item) => {
+					const { node, depth, fieldName } = item;
+					const nodeId = `node-${node.id}`;
+					const hasError = node.hasError;
+
+					const startPosition = node.startPosition;
+					const endPosition = node.endPosition;
+					const positionStr = `[${startPosition.row},${startPosition.column}] - [${endPosition.row},${endPosition.column}]`;
+
+					return (
+						<div key={nodeId} className="whitespace-nowrap mb-1">
+							<div
+								className={`flex items-start cursor-pointer px-2 py-0.5 rounded hover:bg-gray-800 ${hasError ? "text-red-500" : ""}`}
+								style={{ paddingLeft: `${depth * 1.5 + 0.5}rem` }}
+								onMouseEnter={() => {
+									onHoverNode(node);
+								}}
+								onMouseLeave={() => {
+									onHoverNode(null);
+								}}
+							>
+								<div className="flex flex-col">
+									<div className="flex items-center">
+										{fieldName && (
+											<span className="text-sm text-emerald-400 mr-1">
+												{fieldName}:
+											</span>
+										)}
+										<span className="font-semibold text-sm">{node.type}</span>
+
+										<span className="ml-2 text-xs text-gray-400">
+											{positionStr}
+										</span>
+									</div>
+
+									{node.text && (
+										<div className="mt-0.5 ml-4 text-xs text-gray-500 italic break-all">
+											"{node.text.replace(/\n/g, "\\n").substring(0, 50)}
+											{node.text.length > 50 ? "..." : ""}"
+										</div>
+									)}
+								</div>
+							</div>
+						</div>
+					);
+				})}
 			</div>
 		);
 	};
@@ -193,9 +234,9 @@ export default function ParseTreeVisualizer({
 	}
 
 	return (
-		<div className="h-full overflow-auto p-4">
+		<div className="h-full w-full overflow-auto">
 			{treeData ? (
-				<div className="tree-container">{renderTreeNode(treeData)}</div>
+				renderTreeNode(treeData)
 			) : (
 				<div className="flex h-full items-center justify-center">
 					<p className="text-muted-foreground">Enter SQL to see parse tree</p>

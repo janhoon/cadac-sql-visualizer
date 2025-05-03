@@ -29,7 +29,7 @@ export default function SQLEditor({
 		// Set editor options
 		editor.updateOptions({
 			minimap: { enabled: false },
-			scrollBeyondLastLine: false,
+			scrollBeyondLastLine: true,
 			lineNumbers: "on",
 			glyphMargin: false,
 			folding: true,

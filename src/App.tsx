@@ -1,13 +1,16 @@
 import { useState } from "react";
 import "./App.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import ParseTreeVisualizer from "@/components/parse-tree-visualizer";
+import SQLEditor from "@/components/sql-editor";
+import {
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { GithubIcon, HomeIcon } from "lucide-react";
 import type { Node } from "web-tree-sitter";
-import ParseTreeVisualizer from "./components/parse-tree-visualizer";
-import SQLEditor from "./components/sql-editor";
-import { Badge } from "./components/ui/badge";
-import { Button } from "./components/ui/button";
-import { Card } from "./components/ui/card";
 
 // Sample SQL queries for examples
 const EXAMPLE_QUERIES = [
@@ -58,87 +61,109 @@ function App() {
 
 	return (
 		<>
-			<ThemeProvider defaultTheme="dark">
-				<main className="flex min-h-screen flex-col w-screen antialiased bg-gray-800 text-gray-100">
-					<header className="border-b p-4 flex felx-row">
-						<div className="w-full">
-							<h1 className="text-2xl font-bold">CADAC SQL Previewer</h1>
-							<p className="text-muted-foreground">
-								Visualize SQL parse trees in real-time using tree-sitter
-							</p>
-							<div className="flex flex-wrap gap-2 pt-4">
-								<p className="text-muted-foreground">
-									<a
-										href="https://github.com/janhoon/tree-sitter-sql"
-										className="text-blue-500 hover:underline"
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										<Badge className="rounded-full w-36">
-											<GithubIcon /> Parser
-										</Badge>
-									</a>
-								</p>
-								<p className="text-muted-foreground">
-									<a
-										href="https://github.com/janhoon/cadac-sql-visualizer"
-										className="text-blue-500 hover:underline"
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										<Badge className="rounded-full w-36">
-											<GithubIcon /> Visualizer
-										</Badge>
-									</a>
-								</p>
-							</div>
-						</div>
-						<a href="https://janhoon.com">
-							<HomeIcon className="mr-2 text-white hover:text-green-700" />
-						</a>
-					</header>
-
-					<div className="w-full flex flex-1 flex-col gap-4 p-4">
-						<div className="flex flex-wrap gap-2 justify-start items-center">
-							<h2 className="mr-2 text-sm font-medium">Examples:</h2>
-							{EXAMPLE_QUERIES.map((query) => (
-								<Button
-									key={query.name}
-									onClick={() => loadExample(query.name)}
-									className="text-white bg-green-500"
-								>
-									{query.name}
-								</Button>
-							))}
-						</div>
-
-						<div className="grid flex-1 grid-cols-1 gap-4 lg:grid-cols-2">
-							{/* Parse Tree Visualization (Left) */}
-							<Card className="flex flex-col overflow-hidden p-4 bg-gray-900">
-								<h2 className="mb-2 text-sm font-medium">Parse Tree</h2>
-								<div className="flex-1 overflow-auto rounded border bg-muted/30">
-									<ParseTreeVisualizer
-										sqlQuery={sqlQuery}
-										onHoverNode={setHoveredNode}
-									/>
-								</div>
-							</Card>
-
-							{/* SQL Editor (Right) */}
-							<Card className="flex flex-col overflow-hidden p-4 bg-gray-900">
-								<h2 className="mb-2 text-sm font-medium">SQL Editor</h2>
-								<div className="flex-1 overflow-hidden rounded border">
-									<SQLEditor
-										value={sqlQuery}
-										onChange={handleSqlChange}
-										hoveredNode={hoveredNode}
-									/>
-								</div>
-							</Card>
-						</div>
+			<main className="flex h-screen max-h-screen flex-col w-screen antialiased bg-gray-800 text-gray-100">
+				<header className="border-b p-4 flex felx-row">
+					<div className="w-full gap-3 flex flex-col">
+						<h1 className="text-2xl font-bold">CADAC SQL Previewer</h1>
+						<p>
+							The SQL we create tells us a lot about the data we are planning on
+							fetching. Using tools like{" "}
+							<a
+								href="https://github.com/janhoon/tree-sitter-sql"
+								className="text-blue-500 hover:underline"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<span className="text-emerald-400 hover:underline">
+									Tree Sitter Parsers
+								</span>
+							</a>{" "}
+							we can analyze the structure and semantics of SQL queries.
+						</p>
+						<Accordion type="single" collapsible>
+							<AccordionItem value="more-info">
+								<AccordionTrigger className="!bg-gray-800">
+									More Info
+								</AccordionTrigger>
+								<AccordionContent className="p-0 m-0">
+									<div className="flex flex-col gap-2 p-5">
+										<p>
+											Using the editor below you can create your own SQL queries
+											and preview the results. The Resulting tree structure
+											shows how the parts of your query are grouped, such as
+											comments relating to certain columns as part of your
+											select statement.
+										</p>
+										<p>
+											As for the "CADAC" reference... If you know you know but
+											is a project might work on soon, keep an eye out for
+											updates!
+										</p>
+										<p>
+											The source code for this visualizer and the parser can be
+											found on GitHub at the following links
+										</p>
+										<div className="flex flex-wrap gap-6 pt-4 text-emerald-400">
+											<a
+												href="https://github.com/janhoon/tree-sitter-sql"
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												<div className="text-emerald-400 flex flex-row items-center gap-2 hover:underline">
+													<GithubIcon className="h-4 w-4" /> Parser
+												</div>
+											</a>
+											<a
+												href="https://github.com/janhoon/cadac-sql-visualizer"
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												<div className="text-emerald-400 flex flex-row items-center gap-2 hover:underline">
+													<GithubIcon className="h-4 w-4" /> Visualizer
+												</div>
+											</a>
+										</div>
+									</div>
+								</AccordionContent>
+							</AccordionItem>
+						</Accordion>
 					</div>
-				</main>
-			</ThemeProvider>
+					<a href="https://janhoon.com">
+						<HomeIcon className="mr-2 text-white hover:text-green-700" />
+					</a>
+				</header>
+
+				<div className="flex flex-wrap gap-2 justify-start items-center w-full border-b py-1">
+					<h2 className="mr-2 text-sm font-medium">Examples:</h2>
+					{EXAMPLE_QUERIES.map((query) => (
+						<Button
+							key={query.name}
+							onClick={() => loadExample(query.name)}
+							className="!bg-gray-900"
+						>
+							{query.name}
+						</Button>
+					))}
+				</div>
+
+				<div className="flex flex-1 bg-gray-900 overflow-auto">
+					{/* SQL Editor (Right) */}
+					<div className="w-full min-h-min">
+						<SQLEditor
+							value={sqlQuery}
+							onChange={handleSqlChange}
+							hoveredNode={hoveredNode}
+						/>
+					</div>
+					<div className="w-full">
+						{/* Parse Tree Visualization (Left) */}
+						<ParseTreeVisualizer
+							sqlQuery={sqlQuery}
+							onHoverNode={setHoveredNode}
+						/>
+					</div>
+				</div>
+			</main>
 		</>
 	);
 }
