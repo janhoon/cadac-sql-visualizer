@@ -62,7 +62,7 @@ function App() {
 	return (
 		<>
 			<main className="flex h-screen max-h-screen flex-col w-screen antialiased bg-gray-800 text-gray-100">
-				<header className="border-b p-4 flex felx-row">
+				<header className="border-b border-gray-600 p-4 flex felx-row">
 					<div className="w-full gap-3 flex flex-col">
 						<h1 className="text-2xl font-bold">CADAC SQL Previewer</h1>
 						<p>
@@ -133,7 +133,7 @@ function App() {
 					</a>
 				</header>
 
-				<div className="flex flex-wrap gap-2 justify-start items-center w-full border-b py-1">
+				<div className="flex flex-wrap gap-2 justify-start items-center w-full border-b border-gray-600 py-1">
 					<h2 className="mr-2 text-sm font-medium">Examples:</h2>
 					{EXAMPLE_QUERIES.map((query) => (
 						<Button
