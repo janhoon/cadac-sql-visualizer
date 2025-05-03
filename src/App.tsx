@@ -140,7 +140,7 @@ function App() {
 					</a>
 				</header>
 
-				<div className="flex flex-wrap gap-2 justify-start items-center w-full border-b border-gray-600 py-1">
+				<div className="flex flex-row gap-2 justify-start items-center w-full border-b border-gray-600 py-1">
 					<h2 className="mr-2 text-sm font-medium">Examples:</h2>
 					{EXAMPLE_QUERIES.map((query) => (
 						<Button
@@ -153,9 +153,9 @@ function App() {
 					))}
 				</div>
 
-				<div className="flex flex-1 bg-gray-900 overflow-auto">
+				<div className="flex flex-col sm:flex-row flex-1 bg-gray-900 overflow-auto">
 					{/* SQL Editor (Right) */}
-					<div className="w-full min-h-min">
+					<div className="w-full h-[300px] sm:min-h-min sm:h-full">
 						<SQLEditor
 							value={sqlQuery}
 							onChange={handleSqlChange}
