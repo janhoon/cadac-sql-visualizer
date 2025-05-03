@@ -102,9 +102,8 @@ function App() {
 											select statement.
 										</p>
 										<p>
-											As for the "CADAC" reference... If you know you know but
-											is a project might work on soon, keep an eye out for
-											updates!
+											As for the "CADAC" reference... If you know you know, but
+											keep an eye out for updates!
 										</p>
 										<p>
 											The source code for this visualizer and the parser can be
