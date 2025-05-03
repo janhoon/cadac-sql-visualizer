@@ -77,8 +77,9 @@ function App() {
 									<InfoIcon className="hover:text-emerald-700 hover:cursor-pointer" />
 								</PopoverTrigger>
 								<PopoverContent
-									className="bg-gray-900 text-gray-200 w-1/3 border-gray-600"
-									side="right"
+									className="bg-gray-900 text-gray-200 w-screen sm:w-1/3 border-gray-600"
+									side="bottom"
+									sideOffset={10}
 								>
 									<div className="flex flex-col gap-2 p-5">
 										<p>
