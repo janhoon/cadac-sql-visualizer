@@ -51,7 +51,7 @@ FROM mydb.myschema.users AS u;
 
 function App() {
 	const [sqlQuery, setSqlQuery] = useState<string>(
-		"-- Load an exmample query above or create your own\nSELECT current_date",
+		"-- Load an example query above or create your own\nSELECT current_date",
 	);
 	const [hoveredNode, setHoveredNode] = useState<Node | null>(null);
 
@@ -162,8 +162,8 @@ function App() {
 
 				<div className="flex flex-col sm:flex-row flex-1 bg-gray-900 overflow-auto">
 					{/* SQL Editor */}
-					<div className="w-full h-[300px] sm:min-h-min sm:h-full">
-						<h2 className="m-3 text-2xl">SQL Editor</h2>
+					<div className="w-full h-[300px] sm:min-h-min sm:h-full flex flex-col">
+						{/* <h2 className="m-3 text-2xl pt-12 sm:pt-0">SQL Editor</h2> */}
 						<SQLEditor
 							value={sqlQuery}
 							onChange={handleSqlChange}
@@ -171,7 +171,7 @@ function App() {
 						/>
 					</div>
 					{/* Parse Tree Visualization */}
-					<div className="w-full border-l border-gray-700">
+					<div className="w-full border-l border-gray-700 flex flex-col">
 						<h2 className="m-3 text-2xl pt-12 sm:pt-0">Parser</h2>
 						<ParseTreeVisualizer
 							sqlQuery={sqlQuery}

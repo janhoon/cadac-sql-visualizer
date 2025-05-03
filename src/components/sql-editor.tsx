@@ -80,7 +80,8 @@ export default function SQLEditor({
 	}, [hoveredNode]);
 
 	return (
-		<div className="h-full w-full">
+		<div className="h-full w-full flex flex-col">
+			<h2 className="m-3 text-2xl pt-12 sm:pt-0">SQL Editor</h2>
 			<Editor
 				height="100%"
 				defaultLanguage="sql"
