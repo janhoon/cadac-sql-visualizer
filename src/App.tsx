@@ -17,6 +17,7 @@ const EXAMPLE_QUERIES = [
 	{
 		name: "Basic",
 		query: `\
+-- Basic SQL query
 SELECT
 	name,
 	email,
@@ -26,6 +27,8 @@ FROM users;`,
 	{
 		name: "Comments",
 		query: `\
+-- In this example you can see in the tree how comments
+-- are associated with the different parts of the query
 SELECT
 	-- this comment relates to col1
 	col1,
@@ -37,11 +40,13 @@ FROM users;`,
 	{
 		name: "Aliases",
 		query: `\
+-- This example shows how aliases are associated with the different parts of the query
 SELECT
-	u.name AS user_name,
-	u.email AS user_email,
-	u.phone AS user_phone
-FROM users AS u;`,
+			u.name AS user_name,
+			u.email AS user_email,
+			u.phone AS user_phone
+FROM mydb.myschema.users AS u;
+`,
 	},
 ];
 
