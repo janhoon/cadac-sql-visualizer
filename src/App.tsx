@@ -147,14 +147,14 @@ function App() {
 				<div className="flex flex-col gap-2 w-full border-b border-gray-600 pt-2 pb-4">
 					<h2 className="ml-4 mr-2 text-lg font-bold">Load Example:</h2>
 					<div className="flex flex-row gap-2">
-						{EXAMPLE_QUERIES.map((query, index) => (
+						{EXAMPLE_QUERIES.map((query) => (
 							<Button
 								variant="default"
 								key={query.name}
 								onClick={() => loadExample(query.name)}
 								className="bg-gray-800 hover:text-emerald-600 hover:bg-gray-900 w-[100px]"
 							>
-								{`${query.name}`}
+								{query.name}
 							</Button>
 						))}
 					</div>
