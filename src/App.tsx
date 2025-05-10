@@ -47,6 +47,27 @@ SELECT
 FROM mydb.myschema.users AS u;
 `,
 	},
+	{
+		name: "CTEs",
+		query: `\
+-- This example shows how common table expressions are parsed
+WITH cte AS (
+	SELECT
+		u.name AS user_name,
+		u.email AS user_email,
+		u.phone AS user_phone
+	FROM mydb.myschema.users AS u
+),
+cte2 AS (
+	SELECT
+		u.name AS user_name,
+		u.email AS user_email,
+		u.phone AS user_phone
+	FROM cte AS u
+)
+SELECT * FROM cte2;
+`,
+	},
 ];
 
 function App() {
