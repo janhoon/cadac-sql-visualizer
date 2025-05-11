@@ -13,7 +13,7 @@
 		"postinstall": "cp node_modules/@janhoon/tree-sitter-sql/tree-sitter-sql.wasm public/"
 	},
 	"dependencies": {
-		"@janhoon/tree-sitter-sql": "^0.1.4",
+		"@janhoon/tree-sitter-sql": "^0.1.5",
 		"@monaco-editor/react": "^4.7.0",
 		"@radix-ui/react-accordion": "^1.2.8",
 		"@radix-ui/react-popover": "^1.1.11",
