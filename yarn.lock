@@ -914,9 +914,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@janhoon/tree-sitter-sql@npm:^0.1.5":
-  version: 0.1.5
-  resolution: "@janhoon/tree-sitter-sql@npm:0.1.5"
+"@janhoon/tree-sitter-sql@npm:^0.1.6":
+  version: 0.1.6
+  resolution: "@janhoon/tree-sitter-sql@npm:0.1.6"
   dependencies:
     node-addon-api: "npm:^8.2.1"
     node-gyp: "npm:latest"
@@ -926,7 +926,7 @@ __metadata:
   peerDependenciesMeta:
     tree-sitter:
       optional: true
-  checksum: 10c0/b4682e7098149fbdc0a6a3a089aaefe48b68a39bdc15528b9def613e1f52b816c32d0dccf37b62c3a898de50a6f61cc276e993a4ee3cc0845a5bd929c46bf752
+  checksum: 10c0/04d32963f843bdd7267074c6a8fd76d8600db9cdd5daba5911fc290d2109bb6ff28465aa180cc3625ba46adb93e12859f726169e6e51226463c53a07bbdbfd17
   languageName: node
   linkType: hard
 
@@ -2341,7 +2341,7 @@ __metadata:
     "@biomejs/biome": "npm:^1.9.4"
     "@cloudflare/workers-types": "npm:^4.20250425.0"
     "@eslint/js": "npm:^9.22.0"
-    "@janhoon/tree-sitter-sql": "npm:^0.1.5"
+    "@janhoon/tree-sitter-sql": "npm:^0.1.6"
     "@monaco-editor/react": "npm:^4.7.0"
     "@radix-ui/react-accordion": "npm:^1.2.8"
     "@radix-ui/react-popover": "npm:^1.1.11"
